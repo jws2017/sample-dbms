@@ -1,14 +1,19 @@
 import re
-
-actions = {"CREATE ": create_database, "CREATE TABLE": create_table, "CREATE INDEX": create_index, "USE": use, "SELECT": select}
-
+actions = ["CREATE", "CREATE TABLE", "CREATE INDEX", "USE", "INSERT", "DELETE", "UPDATE", "SELECT"]
+tree = []
 try:
 	file = open("<insert sql script here>.sql", 'r')
+	sql = file.read.split(';')
 except FileNotFoundError:
 	print("File not found")
-else:
-	for command in file.read().split(';'):
-		for test in actions.keys():
-			x = re.search(test, command)
 finally:
 	file.close()
+
+for command in sql:
+	for action in actions:
+		pattern = action + "\w+"
+		x = re.search(pattern, command.upper())
+		if x:
+			tree.append(command[len(action):])
+			tree.append(action)
+
