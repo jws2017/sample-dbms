@@ -23,7 +23,7 @@ def parse(sql: str):
 		create_table_pattern = "CREATE TABLE " + identifier + " (" + coldecl + ")"
 		create_database_pattern = "CREATE " + identifier
 		use_database_pattern = "USE " + identifier
-		insert_record_pattern = "INSERT INTO " + identifier + " VALUES (" + identifier + ")"
+		insert_record_pattern = "INSERT INTO " + identifier + " VALUES (" + identifier + "[, " + identifier + "]*)"
 		select_record_pattern = "SELECT " + identifier + " FROM " + identifier
 		select_where_record_pattern = "SELECT " + identifier + " FROM " + identifier + " WHERE " + identifier + " " + op + " " + identifier
 		delete_record_pattern = "DELETE FROM " + identifier
@@ -61,9 +61,9 @@ def parse(sql: str):
 		if insert_record:
 			token = insert_record.string.split(" ")
 			name = token[2]
-			value = token[4]
-			tree.append(value)
-			tree.append("VALUE")
+			values = tuple(token[4:])
+			tree.append(values)
+			tree.append("VALUES")
 			tree.append(name)
 			tree.append("INSERT INTO")
 		if select_record:
@@ -75,7 +75,7 @@ def parse(sql: str):
 			tree.append(name)
 			tree.append("SELECT FROM")
 		if select_where_record:
-			token = select_where_record.string.split(" ")
+			token = select_where_record.striSng.split(" ")
 			name = token[3]
 			col_name = token[1]
 			comp = token[5]
@@ -120,8 +120,29 @@ def parse(sql: str):
 			tree.append("UPDATE")
 	return tree
 
-""" """
-def my_eval(atree):
+
+""" Implement these database functions """
+def create_database(database_name):
+	pass
+def set_database(database_name):
+	pass
+def insert(table, values):
+	pass
+def select(table, column, where):
+	if where = "":
+		
+	else:
+		
+def delete(table, where):
+	if where="":
+		pass
+	else:
+		pass
+def update(table, attribute, value, where):
+	pass
+
+""" Executing commands from tree """
+def my_exec(atree):
 	while len(atree) > 0:
 		token = atree.pop()
 		if token == "CREATE":
@@ -130,3 +151,43 @@ def my_eval(atree):
 		else if token == "CREATE TABLE":
 			name = atree.pop()
 			coldecl = atree.pop()
+		else if token == "USE":
+			name = atree.pop()
+			set_database(name)
+		else if token == "INSERT INTO":
+			table = atree.pop()
+			atree.pop()
+			values = atree.pop()
+			insert(table, values)
+		else if token == "SELECT FROM":
+			table = atree.pop()
+			atree.pop()
+			colname = atree.pop()
+			if re.search(">|<|=|!=", atree[-1]):
+				op = atree.pop()
+				comp = atree.pop()
+				val = atree.pop()
+			else:
+				op=""
+				comp=""
+				val=""
+			select(table, colname, comp+op+val)
+		else if token == "DELETE FROM":
+			table = atree.pop()
+			if re.search(">|<|=|!=", atress[-1]):
+				op = atree.pop()
+				comp = atree.pop()
+				val = atree.pop()
+			else:
+				op=""
+				comp=""
+				val=""
+			delete(table, op+comp+val)
+		else if token == "UPDATE":
+			table = atree.pop()
+			attr_to_set = atree.pop()
+			val = atree.pop()
+			op = atree.pop()
+			comp = atree.pop()
+			someval = atree.pop()
+			update(table, attr_to_set, val, comp + op + someval)
