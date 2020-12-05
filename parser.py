@@ -1,5 +1,6 @@
 import re
 action = ["CREATE", "CREATE TABLE", "CREATE INDEX", "USE", "INSERT", "DELETE", "UPDATE", "SELECT"]
+"""
 try:
 	file = open("<insert sql script here>.sql", 'r')
 	script = file.read()
@@ -8,6 +9,7 @@ except FileNotFoundError:
 	print("File not found")
 finally:
 	file.close()
+"""
 
 """Syntax parsing"""
 def parse(sql: str):
@@ -129,12 +131,12 @@ def set_database(database_name):
 def insert(table, values):
 	pass
 def select(table, column, where):
-	if where = "":
-		
+	if where == "":
+		pass
 	else:
-		
+		pass
 def delete(table, where):
-	if where="":
+	if where=="":
 		pass
 	else:
 		pass
@@ -148,18 +150,18 @@ def my_exec(atree):
 		if token == "CREATE":
 			name=atree.pop()
 			create_database(name)
-		else if token == "CREATE TABLE":
+		elif token == "CREATE TABLE":
 			name = atree.pop()
 			coldecl = atree.pop()
-		else if token == "USE":
+		elif token == "USE":
 			name = atree.pop()
 			set_database(name)
-		else if token == "INSERT INTO":
+		elif token == "INSERT INTO":
 			table = atree.pop()
 			atree.pop()
 			values = atree.pop()
 			insert(table, values)
-		else if token == "SELECT FROM":
+		elif token == "SELECT FROM":
 			table = atree.pop()
 			atree.pop()
 			colname = atree.pop()
@@ -172,7 +174,7 @@ def my_exec(atree):
 				comp=""
 				val=""
 			select(table, colname, comp+op+val)
-		else if token == "DELETE FROM":
+		elif token == "DELETE FROM":
 			table = atree.pop()
 			if re.search(">|<|=|!=", atress[-1]):
 				op = atree.pop()
@@ -183,7 +185,7 @@ def my_exec(atree):
 				comp=""
 				val=""
 			delete(table, op+comp+val)
-		else if token == "UPDATE":
+		elif token == "UPDATE":
 			table = atree.pop()
 			attr_to_set = atree.pop()
 			val = atree.pop()
