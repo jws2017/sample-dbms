@@ -77,7 +77,7 @@ def parse(sql: str):
 			tree.append(name)
 			tree.append("SELECT FROM")
 		if select_where_record:
-			token = select_where_record.striSng.split(" ")
+			token = select_where_record.string.split(" ")
 			name = token[3]
 			col_name = token[1]
 			comp = token[5]
