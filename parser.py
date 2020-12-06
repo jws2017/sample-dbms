@@ -15,7 +15,7 @@ finally:
 def parse(sql: str):
 	tree = []
 	
-	identifier = "[A-Za-z][A-Za-z0-9]*"
+	identifier = "[A-Za-z][A-Za-z0-9]*|\*"
 	typ = "int|String"
 	coldecl = identifier + " " + typ
 	op = "<|>|=|!="
@@ -28,7 +28,7 @@ def parse(sql: str):
 		insert_record_pattern = "INSERT INTO " + identifier + " VALUES (" + identifier + "[, " + identifier + "]*)"
 		select_record_pattern = "SELECT " + identifier + " FROM " + identifier
 		select_where_record_pattern = "SELECT " + identifier + " FROM " + identifier + " WHERE " + identifier + " " + op + " " + identifier
-		delete_record_pattern = "DELETE FROM " + identifier
+		delete_record_pattern = "DELETE " + identifier + " FROM " + identifier
 		delete_where_record_pattern = "DELETE FROM " + identifier + " WHERE " + identifier + " " + op + " " + identifier
 		update_record_pattern = "UPDATE " + identifier + " SET " + identifier + " = " + identifier + " WHERE " + identifier + " " + op + " " + identifier
 		
@@ -91,9 +91,9 @@ def parse(sql: str):
 			tree.append(name)
 			tree.append("SELECT FROM")
 		if delete_record:
-			name = delete_record.string[12:]
-			tree.append(name)
-			tree.append("DELETE FROM")
+			string = delete_record.string
+			tks = string.rsplit()
+			for token in tks: tree.append(token)
 		if delete_where_record:
 			token = delete_where_record.string.split(" ")
 			name = token[2]
