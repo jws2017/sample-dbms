@@ -1,7 +1,8 @@
 class Session:
   
   def __init__(self):
-    self.id = 0
+    self.interpreter = Interpreter()
+    self.id = "<placeholder>" #placeholder id for future implementation
     self.databases = []
     self.database_names = []
     self.current = None
@@ -71,5 +72,15 @@ class Table:
     self.name = name
     self.columns = columns
 
+class Interpreter:
+  pass
+
+class Token:
+  pass
+
 if __name__ == "__main__":
-  pass #for testing and such
+  print("Starting a python db session")
+  session = start_session()
+  print("Please enter an SQL command to execute")
+  command = input()
+  session.execute(command)
