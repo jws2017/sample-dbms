@@ -1,3 +1,6 @@
+SQL_Integer = type("INTEGER", (int, ), {})
+SQL_String = type("VARCHAR", (str, ), {})
+
 class Session:
   
   def __init__(self):
@@ -10,6 +13,7 @@ class Session:
   def create_database(self, name):
     if name in self.database_names:
       print("Database %s already exists".format(name))
+      return 1 # database already exists
     else:
       db = Database(name)
       self.databases.append(db)
@@ -54,29 +58,81 @@ class Database:
     self.tables = []
     self.names = []
     
-  def create_table(name, column_dict):
+  def create_table(name, fields):
     if name in self.names:
       print("Table %s already exists".format(name))
+      return 1 # Table already exists
     else:
-      pass #to implement create_table
+      t = Table(name, fields)
+      self.tables.append(t)
+      self.names.append(t.name)
+      return 0 # Table successfully created
       
   def drop_table(name):
     if name not in self.names:
       print("Table " + name + " does not exist")
+      return 2 # Table does not exist
     else:
-      pass #to implement drop_table
+      for table in self.tables:
+        if table.name == name:
+          self.tables.remove(table)
+          self.names.remove(name)
+          return 0 # Operataion successful
 
 class Table:
   
-  def __init__(self, name, columns):
-    self.name = name
-    self.columns = columns
+  def __init__(self, name, fields):
+    if fields is not None:
+      self.name = name
+      self.fields = fields
+      self.fieldnames = []
+      self.records = []
+      for field in fields:
+        self.fieldnames.append(field.name)
+    else:
+      return None
+    
+  def new_field(name, type):
+    if name in self.fieldnames:
+      print("Field already exists")
+      return 1 #field already exists
+    else:
+      pass
+  
+  def insert(record):
+    if len(self.fields) == len(record):
+      
+    else:
+      return 2 # cannot insert record
+  
+  def update(record, where):
+    pass
+  
+  def delete(record):
+    pass
 
+class Record:
+  def __init__(self):
+    pass
+
+class Field:
+  def __init__(self, name, type):
+    self.name = name
+    self.type = type
+  
 class Interpreter:
-  pass
+  def __init__(self):
+    pass
+    
+  def
 
 class Token:
-  pass
+  def __init__(self, type, v):
+    if type(v) == type:
+      self.type = type
+      self.v = v
+    else:
+      raise Exception("Type does not match value")
 
 if __name__ == "__main__":
   print("Starting a python db session")
