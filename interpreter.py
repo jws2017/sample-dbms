@@ -2,7 +2,7 @@ SQL_Integer = type("INTEGER", (int, ), {})
 SQL_String = type("VARCHAR", (str, ), {})
 
 class Session:
-  
+  """"""
   def __init__(self):
     self.interpreter = Interpreter()
     self.id = "<placeholder>" #placeholder id for future implementation
@@ -35,8 +35,9 @@ class Session:
     else:
       self.current = db
       print("%s is now the current database".format(db.name))
-      
-    def start_session(id=None):
+
+    @classmethod  
+    def start_session(cls, id=None):
       if id is None:
         return Session()
       else:
@@ -58,29 +59,29 @@ class Database:
     self.tables = []
     self.names = []
     
-  def create_table(name, fields):
-    if name in self.names:
-      print("Table %s already exists".format(name))
+  def create_table(self, table_name, fields):
+    if table_name in self.names:
+      print("Table %s already exists".format(table_name))
       return 1 # Table already exists
     else:
-      t = Table(name, fields)
+      t = Table(table_name, fields)
       self.tables.append(t)
       self.names.append(t.name)
       return 0 # Table successfully created
       
-  def drop_table(name):
-    if name not in self.names:
-      print("Table " + name + " does not exist")
+  def drop_table(self, table_name):
+    if table_name not in self.names:
+      print("Table " + table_name + " does not exist")
       return 2 # Table does not exist
     else:
       for table in self.tables:
-        if table.name == name:
+        if table.name == table_name:
           self.tables.remove(table)
-          self.names.remove(name)
+          self.names.remove(table_name)
           return 0 # Operataion successful
 
 class Table:
-  
+  """Implements an abstraction for SQL Tables"""
   def __init__(self, name, fields):
     if fields is not None:
       self.name = name
@@ -91,19 +92,17 @@ class Table:
         self.fieldnames.append(field.name)
     else:
       return None
-    
-  def new_field(name, type):
+
+
+  def new_field(self, name):
     if name in self.fieldnames:
       print("Field already exists")
       return 1 #field already exists
     else:
       pass
   
-  def insert(record):
-    if len(self.fields) == len(record):
-      
-    else:
-      return 2 # cannot insert record
+  def insert(self, record):
+    pass
   
   def update(record, where):
     pass
@@ -111,32 +110,21 @@ class Table:
   def delete(record):
     pass
 
+
 class Record:
   def __init__(self):
     pass
+
 
 class Field:
   def __init__(self, name, type):
     self.name = name
     self.type = type
-  
+
+
 class Interpreter:
-  def __init__(self):
-    pass
-    
-  def
+  pass
+
 
 class Token:
-  def __init__(self, type, v):
-    if type(v) == type:
-      self.type = type
-      self.v = v
-    else:
-      raise Exception("Type does not match value")
-
-if __name__ == "__main__":
-  print("Starting a python db session")
-  session = start_session()
-  print("Please enter an SQL command to execute")
-  command = input()
-  session.execute(command)
+  pass
