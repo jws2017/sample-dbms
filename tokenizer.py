@@ -4,8 +4,9 @@ import re
 def tokenize(sql_command: str):
 	"""
 	Takes a single statement and parses it for SQL. The syntax of the SQL commands that will be implemented are as follows:
-	statement := "CREATE DATABASE" identifier;
+	create_database_statement := "CREATE DATABASE" identifier;
 	identifier := [A-Za-z_][A-Za-z0-9_]*"
+	select_statement := SELECT (identifier|\*) FROM identifier
 	"""
 	if sql_command.endswith(";"): sql_command = sql_command[:-1]
 	identifier = "[A-Za-z_][A-Za-z0-9]*"
@@ -13,6 +14,8 @@ def tokenize(sql_command: str):
 	create_database_pattern = f"CREATE DATABASE {identifier}"
 	create_table_pattern = f"CREATE TABLE {identifier}\W*\({identifier} {type_}(,\W*{identifier} {type_})*\)"
 	create_index_pattern = f"CREATE (UNIQUE )?INDEX {identifier} ON {identifier}\W*\({identifier}(,\W*{identifier})*\)"
+	select_pattern = f"SELECT (({identifier}(,\W*{identifier})*)|\*) FROM {identifier}"
+
 
 	if re.match(create_database_pattern, sql_command, re.IGNORECASE):
 		return {"action": "create", "object_type": "database", "name": sql_command[16:]}
@@ -26,3 +29,6 @@ def tokenize(sql_command: str):
 		name = sql_command[13:s].strip()
 		table_name = sql_command[s+2:].strip()
 		return {"action": "create", "object_type": "index", "name": name, "on": table_name}
+	if re.match(select_pattern, sql_command, re.IGNORECASE):
+		columns_end = sql_command.casefold().find("from")
+		return {"action": "select", "columns": sql_command[7:columns_end], "table": sql_command[columns_end+5:]}
