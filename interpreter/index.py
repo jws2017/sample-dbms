@@ -3,5 +3,4 @@ class Index:
         self.table = table
         self.field = field
         self.hash = {}
-        for entry in self.field:
-            self.hash.update({entry: location})
+        
