@@ -1,4 +1,3 @@
-# sample-dbms
-For the project in Advanced Database Systems
-The parser works by splitting sql commands by ;, then using regexes to identify patterns in the sql script.
-A list is used as substitute for a more formal tree structure for ease of use.
+# Problem Definition
+NB: For this assignment, you will have the freedom to choose any programming language for your development.
+The design and construction of database systems can be an extremely difficult task that takes many things into consideration. This includes thinking about how tables and records gets translated into units of data stored on the actual file system. Important decisions have to made at this level as it relates to file type and organization. Then there is the consideration of performance which includes indexing and hashing and the appropriate structures that should be used to improve searching. In this assignment, you will design and implement a very basic, but your own database system. There will be many assumptions in building this system and only a limited number of features will be developed. In your design, you will build classes to represent a block, record and File. Your system must be able to handle a minimum of 15 records. The blocking factor (bfr) is 5 records per block. One way to think of this, is to use a class to represent a block that contains and array of lists. The size of the array should be 5. The list should have three (3) fields to store and integer and two (2) strings.

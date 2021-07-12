@@ -1,9 +1,15 @@
+import unittest
 from tokenizer import tokenize
 
+class TestLexer(unittest.TestCase):
+    def test_table_creation(self):
+        tokens = tokenize("CREATE TABLE thingy(col1 int, col2 string);")
+        self.assertIsInstance(tokens, dict, "tokenize does not return dict")
+        self.assertIn("action", tokens, "action key not set")
+        self.assertEqual(tokens["action"], "create", "action is not create")
+        self.assertIn("object_type", tokens, "object_type not set")
+        self.assertEqual(tokens["object_type"], "table")
+
+
 if __name__ == "__main__":
-    print(tokenize(""))
-    print(tokenize("CREATE TABLE thingy(col1 int, col2 string);"))
-    print(tokenize("CREATE DATABASE assignment_database;"))
-    print(tokenize("CREATE INDEX dd ON table(col1);"))
-    print(tokenize("SELECT * FROM table WHERE value=\"thingy\";"))
-    print(tokenize("update tet set col1=\"mexico\""))
+    unittest.main()
