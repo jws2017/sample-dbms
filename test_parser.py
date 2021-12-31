@@ -3,7 +3,7 @@ from tokenizer import Lexer, tokenize
 
 class TestLexer(unittest.TestCase):
     def setUp(self) -> None:
-        self.lexer = Lexer()
+        self.lexer = Lexer("CREATE DATABASE db;")
         super().setUp()
 
     def test_tokenize(self) -> None:
