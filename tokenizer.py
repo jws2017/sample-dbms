@@ -1,5 +1,51 @@
 import re
+from dataclasses import dataclass
 
+@dataclass
+class Token:
+	name: str
+	value: str
+
+class Lexer:
+    """Class responsible for breaking input strings into tokens for further processing."""
+    END_OF_LINE = Token("end_of_line", "EOL")
+
+    def __init__(self, string: str):
+        self._string =  string
+        self._pos = -1
+
+    def tokenize(self) -> list:
+        tokens = []
+        while self._pos <= len(self._string):
+            tokens.append(self.scan())
+        return tokens
+
+    def scan(self) -> Token:
+        """Scans the input string for tokens and returns the next token."""
+        self._pos += 1
+        if self._pos >= len(self._string):
+            return Lexer.END_OF_LINE
+        char = self._string[self._pos]
+        if char.isalpha() or char == '_':
+            return Token("identifier", self._scansymbol())
+        if char in '+-*/;#':
+            return Token("operator", char)
+        if char in "0123456789":
+            return Token("number", self._scannumber())
+
+    def _scansymbol(self) -> str:
+        """Scans a string for characters allowed in symbols"""
+        start = self._pos
+        while self._pos < len(self._string) and (self._string[self._pos].isalnum() or self._string[self._pos] == '_'):
+            self._pos += 1
+        return self._string[start: self._pos + 1]
+
+    def _scannumber(self) -> str:
+        """Scans the string for numeric characters."""
+        start = self._pos
+        while self._pos < len(self._string) and self._string[self._pos].isnumeric():
+            self._pos += 1
+        return self._string[start: self._pos + 1]
 
 def tokenize(sql_command: str):
 	"""

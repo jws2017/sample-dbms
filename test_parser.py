@@ -1,8 +1,16 @@
 import unittest
-from tokenizer import tokenize
+from tokenizer import Lexer, tokenize
 
 class TestLexer(unittest.TestCase):
-    def test_table_creation(self):
+    def setUp(self) -> None:
+        self.lexer = Lexer()
+        super().setUp()
+
+    def test_tokenize(self) -> None:
+        tokens = self.lexer.tokenize()
+        self.assertIs(tokens[-1], Lexer.END_OF_LINE)
+
+    def test_table_creation(self) -> None:
         tokens = tokenize("CREATE TABLE thingy(col1 int, col2 string);")
         self.assertIsInstance(tokens, dict, "tokenize does not return dict")
         self.assertIn("action", tokens, "action key not set")
