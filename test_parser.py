@@ -1,5 +1,5 @@
 import unittest
-from tokenizer import Lexer, tokenize
+from lexer.tokenizer import Lexer, tokenize
 
 class TestLexer(unittest.TestCase):
     def setUp(self) -> None:
