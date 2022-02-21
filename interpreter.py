@@ -36,53 +36,53 @@ class Session:
       self.current = db
       print("%s is now the current database".format(db.name))
 
-    @classmethod  
-    def start_session(cls, id=None):
-      if id is None:
-        return Session()
-      else:
-        pass #to implement restarting a session by its unique id
+  @classmethod  
+  def start_session(cls, id=None):
+    if id is None:
+      return Session()
+    else:
+      pass #to implement restarting a session by its unique id
     
-    def stop(self):
-      pass #to implement stopping current database session.
+  def stop(self):
+    pass #to implement stopping current database session.
     
-    def commit(self):
-      pass #to implement saving the current session to disk
+  def commit(self):
+    pass #to implement saving the current session to disk
     
-    def rollback(self):
-      pass #to implement rollback
+  def rollback(self):
+    pass #to implement rollback
 
 class Database:
-  
-  def __init__(self, name):
+  """Class for database methods"""
+  def __init__(self, name: str):
     self.name = name
     self.tables = []
-    self.names = []
+    self.table_names = []
     
-  def create_table(self, table_name, fields):
-    if table_name in self.names:
-      print("Table %s already exists".format(table_name))
+  def create_table(self, table_name: str, fields) -> int:
+    if table_name in self.table_names:
+      print(f"Table {table_name} already exists.")
       return 1 # Table already exists
     else:
       t = Table(table_name, fields)
       self.tables.append(t)
-      self.names.append(t.name)
+      self.table_names.append(t.name)
       return 0 # Table successfully created
       
-  def drop_table(self, table_name):
-    if table_name not in self.names:
-      print("Table " + table_name + " does not exist")
+  def drop_table(self, table_name: str) -> int:
+    if table_name not in self.table_names:
+      print(f"Table {table_name} does not exist.")
       return 2 # Table does not exist
     else:
       for table in self.tables:
         if table.name == table_name:
           self.tables.remove(table)
-          self.names.remove(table_name)
+          self.table_names.remove(table_name)
           return 0 # Operataion successful
 
 class Table:
-  """Implements an abstraction for SQL Tables"""
-  def __init__(self, name, fields):
+  """An abstraction for SQL tables."""
+  def __init__(self, name: str, fields):
     if fields is not None:
       self.name = name
       self.fields = fields
@@ -96,7 +96,7 @@ class Table:
 
   def new_field(self, name):
     if name in self.fieldnames:
-      print("Field already exists")
+      print("Field already exists.")
       return 1 #field already exists
     else:
       pass
@@ -125,6 +125,3 @@ class Field:
 class Interpreter:
   pass
 
-
-class Token:
-  pass

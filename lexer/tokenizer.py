@@ -9,7 +9,7 @@ class Token:
 END_OF_LINE = Token("end_of_line", "EOL")
 SEMICOLON = Token("separator", ";")
 
-KEYWORDS = {"create", "update", "select", "delete"}
+KEYWORDS = {"create": Token("keyword", "create"), "update": Token("keyword", "update"), "select": Token("keyword", "select"), "delete": Token("keyword", "delete")}
 
 class Lexer:
     """Class responsible for breaking input strings into tokens for further processing."""
@@ -38,7 +38,7 @@ class Lexer:
         if char.isalpha() or char == '_':
             text = self._scansymbol()
             if text.lower() in KEYWORDS:
-                return Token("keyword", text.lower())
+                return KEYWORDS[text.lower()]
             return Token("identifier", text)
         if char in '+-*/;':
             return Token("operator", char)
@@ -48,8 +48,12 @@ class Lexer:
             return Token("number", self._scannumber())
 
     def _scanstring(self):
-        #TODO: Implement function to scan input string for ending quote
-        return ""
+        """Scans input for string input"""
+        self._pos += 1
+        start = self._pos
+        while self._pos < len(self._string) and self._string[self._pos] != '"':
+            self._pos += 1
+        return self._string[start: self._pos]
     
     def _scansymbol(self) -> str:
         """Scans a string for characters allowed in symbols"""
